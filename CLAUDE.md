@@ -52,9 +52,16 @@ Container Startup Flow (Metatrader/start.sh):
 |----------|---------|
 | `CUSTOM_USER` | Container username |
 | `PASSWORD` | VNC/web interface password |
-| `MT5_CMD_OPTIONS` | MetaTrader command line options (e.g., `/config:path.ini`) |
+| `MT5_LOGIN` | MT5 account login number (preferred over MT5_CMD_OPTIONS) |
+| `MT5_PASSWORD` | MT5 account password |
+| `MT5_SERVER` | MT5 server name (e.g., `Weltrade-Demo`) |
+| `MT5_PORTABLE` | Set to `true` to run MT5 in portable mode |
+| `MT5_CMD_OPTIONS` | Legacy: MetaTrader command line options (e.g., `/login:123 /password:xxx`) |
 | `MT5_SERVER_PORT` | RPyC server port (default: 8001) |
+| `MT5_SETUP_URL` | Custom MT5 installer URL (default: official MetaQuotes) |
 | `WINEPREFIX` | Wine environment path (default: /config/.wine) |
+
+**Note**: Use individual `MT5_LOGIN`, `MT5_PASSWORD`, `MT5_SERVER` variables instead of `MT5_CMD_OPTIONS` to avoid issues with special characters in passwords.
 
 ## CI/CD
 

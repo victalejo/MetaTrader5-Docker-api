@@ -23,6 +23,7 @@ def create_app() -> FastAPI:
     """Create and configure the FastAPI application."""
     # Import routers here to avoid circular imports
     from .routes.accounts import router as accounts_router
+    from .routes.deploy import router as deploy_router
     from .routes.health import router as health_router
     from .routes.positions import router as positions_router
 
@@ -46,5 +47,6 @@ def create_app() -> FastAPI:
     app.include_router(health_router, tags=["Health"])
     app.include_router(accounts_router, prefix="/accounts", tags=["Accounts"])
     app.include_router(positions_router, prefix="/positions", tags=["Positions"])
+    app.include_router(deploy_router, prefix="/deploy", tags=["Deployment"])
 
     return app

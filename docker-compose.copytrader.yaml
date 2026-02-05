@@ -15,7 +15,10 @@ services:
     environment:
       - CUSTOM_USER=${MASTER_USER:-admin}
       - PASSWORD=${MASTER_PASSWORD:-admin}
-      - "MT5_CMD_OPTIONS=/portable /login:19713030 /password:Nu&5V+h2 /server:Weltrade-Demo"
+      - MT5_PORTABLE=true
+      - MT5_LOGIN=19713030
+      - MT5_PASSWORD=Nu&5V+h2
+      - MT5_SERVER=Weltrade-Demo
     restart: unless-stopped
 
   # Slave MT5 Account 1 (Weltrade Demo - 19713032)
@@ -32,7 +35,9 @@ services:
     environment:
       - CUSTOM_USER=${SLAVE1_USER:-admin}
       - PASSWORD=${SLAVE1_PASSWORD:-admin}
-      - "MT5_CMD_OPTIONS=/login:19713032 /password:+8zHS&5u /server:Weltrade-Demo"
+      - MT5_LOGIN=19713032
+      - MT5_PASSWORD=+8zHS&5u
+      - MT5_SERVER=Weltrade-Demo
     restart: unless-stopped
 
   # Slave MT5 Account 2 (optional - uncomment to use)
