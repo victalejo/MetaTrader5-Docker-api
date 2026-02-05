@@ -2,9 +2,10 @@ import { useState } from 'react'
 import { Plus, Power, PowerOff, Trash2, Settings, RefreshCw } from 'lucide-react'
 import { clsx } from 'clsx'
 import { useAccounts, useReconnectAccount } from '../hooks/useAccounts'
-import { useSlaves, useEnableSlave, useDisableSlave, useDeleteSlave, useUpdateSlave } from '../hooks/useSlaves'
+import { useSlaves, useEnableSlave, useDisableSlave, useDeleteSlave, useUpdateSlave, useCreateSlave } from '../hooks/useSlaves'
 import AccountCard from '../components/AccountCard'
 import SlaveConfigForm from '../components/SlaveConfigForm'
+import AddSlaveForm from '../components/AddSlaveForm'
 
 export default function Accounts() {
   const { data: accounts, isLoading } = useAccounts()
@@ -13,10 +14,12 @@ export default function Accounts() {
   const disableSlave = useDisableSlave()
   const deleteSlave = useDeleteSlave()
   const updateSlave = useUpdateSlave()
+  const createSlave = useCreateSlave()
   const reconnect = useReconnectAccount()
 
   const [editingSlave, setEditingSlave] = useState(null)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(null)
+  const [showAddForm, setShowAddForm] = useState(false)
 
   const handleEnable = (name) => {
     enableSlave.mutate(name)
@@ -36,6 +39,12 @@ export default function Accounts() {
       { name: editingSlave.name, data },
       { onSuccess: () => setEditingSlave(null) }
     )
+  }
+
+  const handleCreateSlave = (data) => {
+    createSlave.mutate(data, {
+      onSuccess: () => setShowAddForm(false),
+    })
   }
 
   if (isLoading) {
@@ -72,11 +81,25 @@ export default function Accounts() {
       <div>
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-semibold text-slate-100">Cuentas Esclavas</h2>
+          <button
+            onClick={() => setShowAddForm(true)}
+            className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            <Plus className="w-4 h-4 mr-2" />
+            Agregar Esclava
+          </button>
         </div>
 
         {slaves.length === 0 ? (
           <div className="bg-slate-800 rounded-lg p-6 border border-slate-700 text-center">
-            <p className="text-slate-400">No hay cuentas esclavas configuradas</p>
+            <p className="text-slate-400 mb-4">No hay cuentas esclavas configuradas</p>
+            <button
+              onClick={() => setShowAddForm(true)}
+              className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              <Plus className="w-4 h-4 mr-2" />
+              Agregar Primera Esclava
+            </button>
           </div>
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -200,6 +223,15 @@ export default function Accounts() {
           </div>
         )}
       </div>
+
+      {/* Add Slave Modal */}
+      {showAddForm && (
+        <AddSlaveForm
+          onSave={handleCreateSlave}
+          onCancel={() => setShowAddForm(false)}
+          isLoading={createSlave.isPending}
+        />
+      )}
 
       {/* Edit Modal */}
       {editingSlave && (
