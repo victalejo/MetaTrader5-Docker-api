@@ -4,10 +4,10 @@ import { clsx } from 'clsx'
 import { useSlaves, useUpdateSlave } from '../hooks/useSlaves'
 
 const LOT_MODES = [
-  { value: 'exact', label: 'Exact', description: 'Copy exact lot size from master' },
-  { value: 'fixed', label: 'Fixed', description: 'Use a fixed lot size' },
-  { value: 'multiplier', label: 'Multiplier', description: 'Multiply master lot by value' },
-  { value: 'proportional', label: 'Proportional', description: 'Scale by balance ratio' },
+  { value: 'exact', label: 'Exacto', description: 'Copiar tamaño exacto del principal' },
+  { value: 'fixed', label: 'Fijo', description: 'Usar un tamaño de lote fijo' },
+  { value: 'multiplier', label: 'Multiplicador', description: 'Multiplicar lote del principal' },
+  { value: 'proportional', label: 'Proporcional', description: 'Escalar por ratio de balance' },
 ]
 
 export default function Settings() {
@@ -68,7 +68,7 @@ export default function Settings() {
   }
 
   if (isLoading) {
-    return <div className="text-slate-400">Loading...</div>
+    return <div className="text-slate-400">Cargando...</div>
   }
 
   const slavesList = slaves || []
@@ -77,19 +77,19 @@ export default function Settings() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-slate-100">Settings</h1>
-        <p className="text-slate-400 mt-1">Configure slave account parameters</p>
+        <h1 className="text-2xl font-bold text-slate-100">Configuración</h1>
+        <p className="text-slate-400 mt-1">Configura los parámetros de las cuentas esclavas</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Slave List */}
         <div className="bg-slate-800 rounded-lg border border-slate-700 overflow-hidden">
           <div className="p-4 border-b border-slate-700">
-            <h2 className="font-semibold text-slate-100">Slave Accounts</h2>
+            <h2 className="font-semibold text-slate-100">Cuentas Esclavas</h2>
           </div>
           <div className="divide-y divide-slate-700">
             {slavesList.length === 0 ? (
-              <div className="p-4 text-slate-400 text-sm">No slave accounts configured</div>
+              <div className="p-4 text-slate-400 text-sm">No hay cuentas esclavas configuradas</div>
             ) : (
               slavesList.map((slave) => (
                 <button
@@ -115,7 +115,7 @@ export default function Settings() {
                           : 'bg-red-500/20 text-red-400'
                       )}
                     >
-                      {slave.connected ? 'Online' : 'Offline'}
+                      {slave.connected ? 'En línea' : 'Fuera de línea'}
                     </span>
                   </div>
                 </button>
@@ -129,26 +129,26 @@ export default function Settings() {
           {!selectedSlave ? (
             <div className="p-8 text-center">
               <SettingsIcon className="w-12 h-12 text-slate-600 mx-auto mb-4" />
-              <p className="text-slate-400">Select a slave account to configure</p>
+              <p className="text-slate-400">Selecciona una cuenta esclava para configurar</p>
             </div>
           ) : (
             <>
               <div className="p-4 border-b border-slate-700 flex items-center justify-between">
                 <h2 className="font-semibold text-slate-100">
-                  Configure {selectedSlave.name}
+                  Configurar {selectedSlave.name}
                 </h2>
                 {saveSuccess && (
-                  <span className="text-sm text-green-400">Settings saved!</span>
+                  <span className="text-sm text-green-400">¡Configuración guardada!</span>
                 )}
               </div>
 
               <div className="p-4 space-y-5">
                 {/* Lot Configuration */}
                 <div className="border-b border-slate-700 pb-5">
-                  <h3 className="text-sm font-medium text-slate-300 mb-4">Lot Configuration</h3>
+                  <h3 className="text-sm font-medium text-slate-300 mb-4">Configuración de Lote</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm text-slate-400 mb-1">Lot Mode</label>
+                      <label className="block text-sm text-slate-400 mb-1">Modo de Lote</label>
                       <select
                         name="lot_mode"
                         value={form.lot_mode}
@@ -166,7 +166,7 @@ export default function Settings() {
                       </p>
                     </div>
                     <div>
-                      <label className="block text-sm text-slate-400 mb-1">Lot Value</label>
+                      <label className="block text-sm text-slate-400 mb-1">Valor de Lote</label>
                       <input
                         type="number"
                         name="lot_value"
@@ -178,7 +178,7 @@ export default function Settings() {
                       />
                     </div>
                     <div>
-                      <label className="block text-sm text-slate-400 mb-1">Min Lot</label>
+                      <label className="block text-sm text-slate-400 mb-1">Lote Mínimo</label>
                       <input
                         type="number"
                         name="min_lot"
@@ -190,7 +190,7 @@ export default function Settings() {
                       />
                     </div>
                     <div>
-                      <label className="block text-sm text-slate-400 mb-1">Max Lot</label>
+                      <label className="block text-sm text-slate-400 mb-1">Lote Máximo</label>
                       <input
                         type="number"
                         name="max_lot"
@@ -206,10 +206,10 @@ export default function Settings() {
 
                 {/* Trade Configuration */}
                 <div className="border-b border-slate-700 pb-5">
-                  <h3 className="text-sm font-medium text-slate-300 mb-4">Trade Configuration</h3>
+                  <h3 className="text-sm font-medium text-slate-300 mb-4">Configuración de Operaciones</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm text-slate-400 mb-1">Magic Number</label>
+                      <label className="block text-sm text-slate-400 mb-1">Número Mágico</label>
                       <input
                         type="number"
                         name="magic_number"
@@ -219,7 +219,7 @@ export default function Settings() {
                       />
                     </div>
                     <div>
-                      <label className="block text-sm text-slate-400 mb-1">Max Slippage (points)</label>
+                      <label className="block text-sm text-slate-400 mb-1">Deslizamiento Máximo (puntos)</label>
                       <input
                         type="number"
                         name="max_slippage"
@@ -241,7 +241,7 @@ export default function Settings() {
                         className="w-4 h-4 rounded border-slate-600 bg-slate-700 text-blue-500 focus:ring-blue-500"
                       />
                       <span className="ml-2 text-sm text-slate-300">
-                        Invert trades (BUY → SELL, SELL → BUY)
+                        Invertir operaciones (COMPRA → VENTA, VENTA → COMPRA)
                       </span>
                     </label>
                   </div>
@@ -249,10 +249,10 @@ export default function Settings() {
 
                 {/* Symbol Filter */}
                 <div>
-                  <h3 className="text-sm font-medium text-slate-300 mb-4">Symbol Filter</h3>
+                  <h3 className="text-sm font-medium text-slate-300 mb-4">Filtro de Símbolos</h3>
                   <div>
                     <label className="block text-sm text-slate-400 mb-1">
-                      Allowed Symbols (comma-separated, empty for all)
+                      Símbolos Permitidos (separados por coma, vacío para todos)
                     </label>
                     <input
                       type="text"
@@ -263,7 +263,7 @@ export default function Settings() {
                       className="w-full bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                     <p className="text-xs text-slate-500 mt-1">
-                      Leave empty to copy all symbols
+                      Dejar vacío para copiar todos los símbolos
                     </p>
                   </div>
                 </div>
@@ -272,7 +272,7 @@ export default function Settings() {
                 <div className="flex items-start gap-3 p-3 bg-yellow-500/10 rounded-lg border border-yellow-500/20">
                   <AlertCircle className="w-5 h-5 text-yellow-400 shrink-0 mt-0.5" />
                   <div className="text-sm text-yellow-200">
-                    Changes will apply to new trades only. Existing positions will not be affected.
+                    Los cambios se aplicarán solo a nuevas operaciones. Las posiciones existentes no serán afectadas.
                   </div>
                 </div>
 
@@ -288,7 +288,7 @@ export default function Settings() {
                     )}
                   >
                     <Save className="w-4 h-4 mr-2" />
-                    {updateSlave.isPending ? 'Saving...' : 'Save Changes'}
+                    {updateSlave.isPending ? 'Guardando...' : 'Guardar Cambios'}
                   </button>
                 </div>
               </div>

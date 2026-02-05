@@ -5,7 +5,7 @@ export default function PositionTable({ positions }) {
   if (!positions || Object.keys(positions).length === 0) {
     return (
       <div className="bg-slate-800 rounded-lg border border-slate-700 p-8 text-center">
-        <p className="text-slate-400">No active positions</p>
+        <p className="text-slate-400">No hay posiciones activas</p>
       </div>
     )
   }
@@ -18,22 +18,22 @@ export default function PositionTable({ positions }) {
         <thead>
           <tr className="border-b border-slate-700">
             <th className="px-4 py-3 text-left text-xs font-medium text-slate-400 uppercase">
-              Master Ticket
+              Ticket Principal
             </th>
             <th className="px-4 py-3 text-left text-xs font-medium text-slate-400 uppercase">
-              Symbol
+              Símbolo
             </th>
             <th className="px-4 py-3 text-left text-xs font-medium text-slate-400 uppercase">
-              Type
+              Tipo
             </th>
             <th className="px-4 py-3 text-left text-xs font-medium text-slate-400 uppercase">
-              Volume
+              Volumen
             </th>
             <th className="px-4 py-3 text-left text-xs font-medium text-slate-400 uppercase">
-              Slave Mappings
+              Mapeos Esclavos
             </th>
             <th className="px-4 py-3 text-left text-xs font-medium text-slate-400 uppercase">
-              Status
+              Estado
             </th>
           </tr>
         </thead>
@@ -64,7 +64,7 @@ export default function PositionTable({ positions }) {
                     ) : (
                       <ArrowDownRight className="w-3 h-3 mr-1" />
                     )}
-                    {isBuy ? 'BUY' : 'SELL'}
+                    {isBuy ? 'COMPRA' : 'VENTA'}
                   </span>
                 </td>
                 <td className="px-4 py-3 text-sm text-slate-100">
@@ -93,7 +93,7 @@ export default function PositionTable({ positions }) {
                         : 'bg-red-500/20 text-red-400'
                     )}
                   >
-                    {firstMapping?.status || 'unknown'}
+                    {firstMapping?.status === 'open' ? 'Abierta' : firstMapping?.status === 'closed' ? 'Cerrada' : 'Error'}
                   </span>
                 </td>
               </tr>

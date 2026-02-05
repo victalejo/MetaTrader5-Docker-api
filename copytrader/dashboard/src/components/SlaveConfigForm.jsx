@@ -3,10 +3,10 @@ import { X } from 'lucide-react'
 import { clsx } from 'clsx'
 
 const LOT_MODES = [
-  { value: 'exact', label: 'Exact', description: 'Same lot as master' },
-  { value: 'fixed', label: 'Fixed', description: 'Fixed lot size' },
-  { value: 'multiplier', label: 'Multiplier', description: 'Lot × multiplier' },
-  { value: 'proportional', label: 'Proportional', description: 'Scale by balance ratio' },
+  { value: 'exact', label: 'Exacto', description: 'Mismo lote que el principal' },
+  { value: 'fixed', label: 'Fijo', description: 'Tamaño de lote fijo' },
+  { value: 'multiplier', label: 'Multiplicador', description: 'Lote × multiplicador' },
+  { value: 'proportional', label: 'Proporcional', description: 'Escalar por ratio de balance' },
 ]
 
 export default function SlaveConfigForm({ slave, onSave, onCancel, isLoading }) {
@@ -50,7 +50,7 @@ export default function SlaveConfigForm({ slave, onSave, onCancel, isLoading }) 
       <div className="bg-slate-800 rounded-lg border border-slate-700 w-full max-w-lg max-h-[90vh] overflow-auto">
         <div className="flex items-center justify-between p-4 border-b border-slate-700">
           <h2 className="text-lg font-semibold text-slate-100">
-            {slave ? `Configure ${slave.name}` : 'Add Slave'}
+            {slave ? `Configurar ${slave.name}` : 'Agregar Esclavo'}
           </h2>
           <button onClick={onCancel} className="text-slate-400 hover:text-slate-100">
             <X className="w-5 h-5" />
@@ -61,7 +61,7 @@ export default function SlaveConfigForm({ slave, onSave, onCancel, isLoading }) 
           {/* Lot Mode */}
           <div>
             <label className="block text-sm font-medium text-slate-300 mb-2">
-              Lot Mode
+              Modo de Lote
             </label>
             <select
               name="lot_mode"
@@ -80,7 +80,7 @@ export default function SlaveConfigForm({ slave, onSave, onCancel, isLoading }) 
           {/* Lot Value */}
           <div>
             <label className="block text-sm font-medium text-slate-300 mb-2">
-              Lot Value
+              Valor de Lote
             </label>
             <input
               type="number"
@@ -97,7 +97,7 @@ export default function SlaveConfigForm({ slave, onSave, onCancel, isLoading }) 
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-slate-300 mb-2">
-                Min Lot
+                Lote Mínimo
               </label>
               <input
                 type="number"
@@ -111,7 +111,7 @@ export default function SlaveConfigForm({ slave, onSave, onCancel, isLoading }) 
             </div>
             <div>
               <label className="block text-sm font-medium text-slate-300 mb-2">
-                Max Lot
+                Lote Máximo
               </label>
               <input
                 type="number"
@@ -128,7 +128,7 @@ export default function SlaveConfigForm({ slave, onSave, onCancel, isLoading }) 
           {/* Magic Number */}
           <div>
             <label className="block text-sm font-medium text-slate-300 mb-2">
-              Magic Number
+              Número Mágico
             </label>
             <input
               type="number"
@@ -142,7 +142,7 @@ export default function SlaveConfigForm({ slave, onSave, onCancel, isLoading }) 
           {/* Max Slippage */}
           <div>
             <label className="block text-sm font-medium text-slate-300 mb-2">
-              Max Slippage (points)
+              Deslizamiento Máximo (puntos)
             </label>
             <input
               type="number"
@@ -157,7 +157,7 @@ export default function SlaveConfigForm({ slave, onSave, onCancel, isLoading }) 
           {/* Symbols Filter */}
           <div>
             <label className="block text-sm font-medium text-slate-300 mb-2">
-              Symbols Filter (comma-separated, empty for all)
+              Filtro de Símbolos (separados por coma, vacío para todos)
             </label>
             <input
               type="text"
@@ -179,7 +179,7 @@ export default function SlaveConfigForm({ slave, onSave, onCancel, isLoading }) 
               className="w-4 h-4 rounded border-slate-600 bg-slate-700 text-blue-500 focus:ring-blue-500"
             />
             <label className="ml-2 text-sm text-slate-300">
-              Invert trades (BUY → SELL, SELL → BUY)
+              Invertir operaciones (COMPRA → VENTA, VENTA → COMPRA)
             </label>
           </div>
 
@@ -190,7 +190,7 @@ export default function SlaveConfigForm({ slave, onSave, onCancel, isLoading }) 
               onClick={onCancel}
               className="px-4 py-2 text-sm font-medium text-slate-300 hover:text-slate-100"
             >
-              Cancel
+              Cancelar
             </button>
             <button
               type="submit"
@@ -201,7 +201,7 @@ export default function SlaveConfigForm({ slave, onSave, onCancel, isLoading }) 
                 'disabled:opacity-50 disabled:cursor-not-allowed'
               )}
             >
-              {isLoading ? 'Saving...' : 'Save'}
+              {isLoading ? 'Guardando...' : 'Guardar'}
             </button>
           </div>
         </form>

@@ -21,8 +21,8 @@ export default function Dashboard() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-slate-100">Dashboard</h1>
-          <p className="text-slate-400 mt-1">Monitor your copy trading system</p>
+          <h1 className="text-2xl font-bold text-slate-100">Panel</h1>
+          <p className="text-slate-400 mt-1">Monitorea tu sistema de copy trading</p>
         </div>
         <StatusBadge status={health?.status} size="lg" />
       </div>
@@ -30,30 +30,30 @@ export default function Dashboard() {
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatsCard
-          title="System Status"
-          value={health?.running ? 'Running' : 'Stopped'}
-          subtitle={health?.status}
+          title="Estado del Sistema"
+          value={health?.running ? 'Ejecutando' : 'Detenido'}
+          subtitle={health?.status === 'healthy' ? 'Saludable' : health?.status}
           icon={Activity}
           color={health?.running ? 'green' : 'red'}
         />
         <StatsCard
-          title="Master Account"
-          value={masterConnected ? 'Connected' : 'Disconnected'}
+          title="Cuenta Principal"
+          value={masterConnected ? 'Conectada' : 'Desconectada'}
           subtitle={accounts?.master?.name || '-'}
           icon={Users}
           color={masterConnected ? 'green' : 'red'}
         />
         <StatsCard
-          title="Slave Accounts"
+          title="Cuentas Esclavas"
           value={`${slavesConnected}/${slavesTotal}`}
-          subtitle="connected"
+          subtitle="conectadas"
           icon={Users}
           color={slavesConnected === slavesTotal ? 'green' : 'yellow'}
         />
         <StatsCard
-          title="Active Positions"
+          title="Posiciones Activas"
           value={positionCount}
-          subtitle="being copied"
+          subtitle="siendo copiadas"
           icon={TrendingUp}
           color="blue"
         />
@@ -61,9 +61,9 @@ export default function Dashboard() {
 
       {/* Account Cards */}
       <div>
-        <h2 className="text-lg font-semibold text-slate-100 mb-4">Accounts</h2>
+        <h2 className="text-lg font-semibold text-slate-100 mb-4">Cuentas</h2>
         {accountsLoading ? (
-          <div className="text-slate-400">Loading accounts...</div>
+          <div className="text-slate-400">Cargando cuentas...</div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {accounts?.master && (
@@ -80,7 +80,7 @@ export default function Dashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Master Balance */}
         <div className="bg-slate-800 rounded-lg p-6 border border-slate-700">
-          <h3 className="text-lg font-semibold text-slate-100 mb-4">Master Account</h3>
+          <h3 className="text-lg font-semibold text-slate-100 mb-4">Cuenta Principal</h3>
           {accounts?.master ? (
             <div className="space-y-4">
               <div className="flex justify-between items-center">
@@ -90,45 +90,45 @@ export default function Dashboard() {
                 </span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-slate-400">Equity</span>
+                <span className="text-slate-400">Equidad</span>
                 <span className="text-xl font-semibold text-slate-100">
                   ${accounts.master.equity?.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                 </span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-slate-400">Positions</span>
+                <span className="text-slate-400">Posiciones</span>
                 <span className="text-xl font-semibold text-slate-100">
                   {accounts.master.positions_count || 0}
                 </span>
               </div>
             </div>
           ) : (
-            <p className="text-slate-400">No master account connected</p>
+            <p className="text-slate-400">No hay cuenta principal conectada</p>
           )}
         </div>
 
         {/* System Health */}
         <div className="bg-slate-800 rounded-lg p-6 border border-slate-700">
-          <h3 className="text-lg font-semibold text-slate-100 mb-4">System Health</h3>
+          <h3 className="text-lg font-semibold text-slate-100 mb-4">Salud del Sistema</h3>
           <div className="space-y-3">
             <div className="flex justify-between items-center">
-              <span className="text-slate-400">Status</span>
+              <span className="text-slate-400">Estado</span>
               <StatusBadge status={health?.status} size="sm" />
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-slate-400">Running</span>
+              <span className="text-slate-400">Ejecutando</span>
               <span className={health?.running ? 'text-green-400' : 'text-red-400'}>
-                {health?.running ? 'Yes' : 'No'}
+                {health?.running ? 'Sí' : 'No'}
               </span>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-slate-400">Active Mappings</span>
+              <span className="text-slate-400">Mapeos Activos</span>
               <span className="text-slate-100">{health?.active_mappings || 0}</span>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-slate-400">Master Connected</span>
+              <span className="text-slate-400">Principal Conectada</span>
               <span className={masterConnected ? 'text-green-400' : 'text-red-400'}>
-                {masterConnected ? 'Yes' : 'No'}
+                {masterConnected ? 'Sí' : 'No'}
               </span>
             </div>
           </div>

@@ -28,7 +28,7 @@ export default function AccountCard({ account, showReconnect = true }) {
           </div>
           <div>
             <h3 className="font-medium text-slate-100">{account.name}</h3>
-            <p className="text-sm text-slate-400">{account.role}</p>
+            <p className="text-sm text-slate-400">{account.role === 'master' ? 'Principal' : 'Esclavo'}</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -40,7 +40,7 @@ export default function AccountCard({ account, showReconnect = true }) {
                 : 'bg-red-500/20 text-red-400'
             )}
           >
-            {account.connected ? 'Connected' : 'Disconnected'}
+            {account.connected ? 'Conectado' : 'Desconectado'}
           </span>
         </div>
       </div>
@@ -53,7 +53,7 @@ export default function AccountCard({ account, showReconnect = true }) {
           </p>
         </div>
         <div>
-          <p className="text-xs text-slate-500">Equity</p>
+          <p className="text-xs text-slate-500">Equidad</p>
           <p className="text-lg font-semibold text-slate-100">
             ${account.equity?.toLocaleString(undefined, { minimumFractionDigits: 2 }) || '0.00'}
           </p>
@@ -62,7 +62,7 @@ export default function AccountCard({ account, showReconnect = true }) {
 
       <div className="mt-4 flex items-center justify-between text-sm">
         <span className="text-slate-400">
-          {account.positions_count || 0} positions
+          {account.positions_count || 0} posiciones
         </span>
         {showReconnect && !account.connected && (
           <button
@@ -71,7 +71,7 @@ export default function AccountCard({ account, showReconnect = true }) {
             className="flex items-center text-blue-400 hover:text-blue-300 disabled:opacity-50"
           >
             <RefreshCw className={clsx('w-4 h-4 mr-1', reconnect.isPending && 'animate-spin')} />
-            Reconnect
+            Reconectar
           </button>
         )}
       </div>

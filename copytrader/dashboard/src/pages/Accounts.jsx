@@ -39,7 +39,7 @@ export default function Accounts() {
   }
 
   if (isLoading) {
-    return <div className="text-slate-400">Loading accounts...</div>
+    return <div className="text-slate-400">Cargando cuentas...</div>
   }
 
   const slaves = slavesDetail || []
@@ -49,21 +49,21 @@ export default function Accounts() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-slate-100">Accounts</h1>
-          <p className="text-slate-400 mt-1">Manage master and slave accounts</p>
+          <h1 className="text-2xl font-bold text-slate-100">Cuentas</h1>
+          <p className="text-slate-400 mt-1">Administra las cuentas principal y esclavas</p>
         </div>
       </div>
 
       {/* Master Account */}
       <div>
-        <h2 className="text-lg font-semibold text-slate-100 mb-4">Master Account</h2>
+        <h2 className="text-lg font-semibold text-slate-100 mb-4">Cuenta Principal</h2>
         {accounts?.master ? (
           <div className="max-w-md">
             <AccountCard account={accounts.master} />
           </div>
         ) : (
           <div className="bg-slate-800 rounded-lg p-6 border border-slate-700">
-            <p className="text-slate-400">No master account configured</p>
+            <p className="text-slate-400">No hay cuenta principal configurada</p>
           </div>
         )}
       </div>
@@ -71,12 +71,12 @@ export default function Accounts() {
       {/* Slave Accounts */}
       <div>
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold text-slate-100">Slave Accounts</h2>
+          <h2 className="text-lg font-semibold text-slate-100">Cuentas Esclavas</h2>
         </div>
 
         {slaves.length === 0 ? (
           <div className="bg-slate-800 rounded-lg p-6 border border-slate-700 text-center">
-            <p className="text-slate-400">No slave accounts configured</p>
+            <p className="text-slate-400">No hay cuentas esclavas configuradas</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -100,7 +100,7 @@ export default function Accounts() {
                             : 'bg-slate-500/20 text-slate-400'
                         )}
                       >
-                        {slave.enabled ? 'Enabled' : 'Disabled'}
+                        {slave.enabled ? 'Habilitada' : 'Deshabilitada'}
                       </span>
                       <span
                         className={clsx(
@@ -110,7 +110,7 @@ export default function Accounts() {
                             : 'bg-red-500/20 text-red-400'
                         )}
                       >
-                        {slave.connected ? 'Connected' : 'Disconnected'}
+                        {slave.connected ? 'Conectada' : 'Desconectada'}
                       </span>
                     </div>
                   </div>
@@ -118,11 +118,11 @@ export default function Accounts() {
                   {/* Config Summary */}
                   <div className="mt-4 grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
                     <div className="flex justify-between">
-                      <span className="text-slate-500">Lot Mode</span>
+                      <span className="text-slate-500">Modo Lote</span>
                       <span className="text-slate-300">{slave.lot_mode}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-slate-500">Lot Value</span>
+                      <span className="text-slate-500">Valor Lote</span>
                       <span className="text-slate-300">{slave.lot_value}</span>
                     </div>
                     <div className="flex justify-between">
@@ -130,14 +130,14 @@ export default function Accounts() {
                       <span className="text-slate-300">{slave.magic_number}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-slate-500">Invert</span>
-                      <span className="text-slate-300">{slave.invert_trades ? 'Yes' : 'No'}</span>
+                      <span className="text-slate-500">Invertir</span>
+                      <span className="text-slate-300">{slave.invert_trades ? 'Sí' : 'No'}</span>
                     </div>
                   </div>
 
                   {slave.symbols_filter && slave.symbols_filter.length > 0 && (
                     <div className="mt-3">
-                      <span className="text-xs text-slate-500">Symbols: </span>
+                      <span className="text-xs text-slate-500">Símbolos: </span>
                       <span className="text-xs text-slate-300">
                         {slave.symbols_filter.join(', ')}
                       </span>
@@ -155,7 +155,7 @@ export default function Accounts() {
                         className="flex items-center text-sm text-yellow-400 hover:text-yellow-300"
                       >
                         <PowerOff className="w-4 h-4 mr-1" />
-                        Disable
+                        Deshabilitar
                       </button>
                     ) : (
                       <button
@@ -164,7 +164,7 @@ export default function Accounts() {
                         className="flex items-center text-sm text-green-400 hover:text-green-300"
                       >
                         <Power className="w-4 h-4 mr-1" />
-                        Enable
+                        Habilitar
                       </button>
                     )}
                     {!slave.connected && (
@@ -174,7 +174,7 @@ export default function Accounts() {
                         className="flex items-center text-sm text-blue-400 hover:text-blue-300"
                       >
                         <RefreshCw className={clsx('w-4 h-4 mr-1', reconnect.isPending && 'animate-spin')} />
-                        Reconnect
+                        Reconectar
                       </button>
                     )}
                   </div>
@@ -184,14 +184,14 @@ export default function Accounts() {
                       className="flex items-center text-sm text-slate-400 hover:text-slate-100"
                     >
                       <Settings className="w-4 h-4 mr-1" />
-                      Configure
+                      Configurar
                     </button>
                     <button
                       onClick={() => setShowDeleteConfirm(slave.name)}
                       className="flex items-center text-sm text-red-400 hover:text-red-300"
                     >
                       <Trash2 className="w-4 h-4 mr-1" />
-                      Delete
+                      Eliminar
                     </button>
                   </div>
                 </div>
@@ -215,22 +215,22 @@ export default function Accounts() {
       {showDeleteConfirm && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-slate-800 rounded-lg border border-slate-700 p-6 max-w-sm">
-            <h3 className="text-lg font-semibold text-slate-100">Delete Slave</h3>
+            <h3 className="text-lg font-semibold text-slate-100">Eliminar Esclava</h3>
             <p className="text-slate-400 mt-2">
-              Are you sure you want to delete <strong>{showDeleteConfirm}</strong>?
+              ¿Estás seguro que deseas eliminar <strong>{showDeleteConfirm}</strong>?
             </p>
             <div className="flex justify-end gap-3 mt-6">
               <button
                 onClick={() => setShowDeleteConfirm(null)}
                 className="px-4 py-2 text-sm text-slate-300 hover:text-slate-100"
               >
-                Cancel
+                Cancelar
               </button>
               <button
                 onClick={() => handleDelete(showDeleteConfirm)}
                 className="px-4 py-2 text-sm bg-red-600 text-white rounded-lg hover:bg-red-700"
               >
-                Delete
+                Eliminar
               </button>
             </div>
           </div>

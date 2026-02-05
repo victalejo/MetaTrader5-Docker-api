@@ -1,8 +1,15 @@
 import { clsx } from 'clsx'
 
+const statusLabels = {
+  healthy: 'Saludable',
+  degraded: 'Degradado',
+  unhealthy: 'Sin conexión',
+}
+
 export default function StatusBadge({ status, size = 'md' }) {
   const isHealthy = status === 'healthy'
   const isDegraded = status === 'degraded'
+  const label = statusLabels[status] || 'Desconocido'
 
   return (
     <div
@@ -24,7 +31,7 @@ export default function StatusBadge({ status, size = 'md' }) {
           !isHealthy && !isDegraded && 'bg-red-400'
         )}
       />
-      {status || 'Unknown'}
+      {label}
     </div>
   )
 }

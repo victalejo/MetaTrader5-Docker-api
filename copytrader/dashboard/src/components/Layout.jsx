@@ -11,7 +11,7 @@ export default function Layout() {
       <Sidebar />
       <div className="flex-1 flex flex-col overflow-hidden">
         <header className="h-16 bg-slate-800 border-b border-slate-700 flex items-center justify-between px-6">
-          <h1 className="text-xl font-semibold text-slate-100">CopyTrader</h1>
+          <h1 className="text-xl font-semibold text-slate-100">Panel de Control</h1>
           <div className="flex items-center gap-4">
             <StatusBadge status={health?.status} />
           </div>

@@ -38,8 +38,8 @@ export default function Positions() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-slate-100">Positions</h1>
-          <p className="text-slate-400 mt-1">Monitor active trades and mappings</p>
+          <h1 className="text-2xl font-bold text-slate-100">Posiciones</h1>
+          <p className="text-slate-400 mt-1">Monitorea operaciones activas y mapeos</p>
         </div>
         <button
           onClick={handleRefresh}
@@ -47,26 +47,26 @@ export default function Positions() {
           className="flex items-center px-4 py-2 bg-slate-700 text-slate-100 rounded-lg hover:bg-slate-600 disabled:opacity-50"
         >
           <RefreshCw className={clsx('w-4 h-4 mr-2', isFetching && 'animate-spin')} />
-          Refresh
+          Actualizar
         </button>
       </div>
 
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <div className="bg-slate-800 rounded-lg p-4 border border-slate-700">
-          <p className="text-sm text-slate-400">Total Positions</p>
+          <p className="text-sm text-slate-400">Total Posiciones</p>
           <p className="text-2xl font-bold text-slate-100">{stats?.total_positions || 0}</p>
         </div>
         <div className="bg-slate-800 rounded-lg p-4 border border-slate-700">
-          <p className="text-sm text-slate-400">Active Mappings</p>
+          <p className="text-sm text-slate-400">Mapeos Activos</p>
           <p className="text-2xl font-bold text-slate-100">{stats?.active_mappings || 0}</p>
         </div>
         <div className="bg-slate-800 rounded-lg p-4 border border-slate-700">
-          <p className="text-sm text-slate-400">Open</p>
+          <p className="text-sm text-slate-400">Abiertas</p>
           <p className="text-2xl font-bold text-green-400">{stats?.open || 0}</p>
         </div>
         <div className="bg-slate-800 rounded-lg p-4 border border-slate-700">
-          <p className="text-sm text-slate-400">Closed</p>
+          <p className="text-sm text-slate-400">Cerradas</p>
           <p className="text-2xl font-bold text-slate-400">{stats?.closed || 0}</p>
         </div>
       </div>
@@ -76,7 +76,7 @@ export default function Positions() {
         <div className="flex items-center gap-4 flex-wrap">
           <div className="flex items-center gap-2">
             <Filter className="w-4 h-4 text-slate-400" />
-            <span className="text-sm text-slate-400">Filters:</span>
+            <span className="text-sm text-slate-400">Filtros:</span>
           </div>
 
           <select
@@ -84,7 +84,7 @@ export default function Positions() {
             onChange={(e) => setSymbolFilter(e.target.value)}
             className="bg-slate-700 border border-slate-600 rounded-lg px-3 py-1.5 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
-            <option value="">All Symbols</option>
+            <option value="">Todos los Símbolos</option>
             {uniqueSymbols.map((symbol) => (
               <option key={symbol} value={symbol}>
                 {symbol}
@@ -97,7 +97,7 @@ export default function Positions() {
             onChange={(e) => setSlaveFilter(e.target.value)}
             className="bg-slate-700 border border-slate-600 rounded-lg px-3 py-1.5 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
-            <option value="">All Slaves</option>
+            <option value="">Todas las Esclavas</option>
             {uniqueSlaves.map((slave) => (
               <option key={slave} value={slave}>
                 {slave}
@@ -114,7 +114,7 @@ export default function Positions() {
               className="flex items-center text-sm text-slate-400 hover:text-slate-100"
             >
               <X className="w-4 h-4 mr-1" />
-              Clear
+              Limpiar
             </button>
           )}
         </div>
@@ -123,7 +123,7 @@ export default function Positions() {
       {/* Positions Table */}
       {isLoading ? (
         <div className="bg-slate-800 rounded-lg border border-slate-700 p-8 text-center">
-          <p className="text-slate-400">Loading positions...</p>
+          <p className="text-slate-400">Cargando posiciones...</p>
         </div>
       ) : (
         <PositionTable positions={filteredPositions} />
@@ -131,7 +131,7 @@ export default function Positions() {
 
       {/* Auto-refresh notice */}
       <div className="text-center text-sm text-slate-500">
-        Positions refresh automatically every 5 seconds
+        Las posiciones se actualizan automáticamente cada 5 segundos
       </div>
     </div>
   )

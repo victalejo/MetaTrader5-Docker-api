@@ -3,10 +3,10 @@ import { LayoutDashboard, Users, TrendingUp, Settings, Activity } from 'lucide-r
 import { clsx } from 'clsx'
 
 const navItems = [
-  { to: '/', icon: LayoutDashboard, label: 'Dashboard' },
-  { to: '/accounts', icon: Users, label: 'Accounts' },
-  { to: '/positions', icon: TrendingUp, label: 'Positions' },
-  { to: '/settings', icon: Settings, label: 'Settings' },
+  { to: '/', icon: LayoutDashboard, label: 'Panel' },
+  { to: '/accounts', icon: Users, label: 'Cuentas' },
+  { to: '/positions', icon: TrendingUp, label: 'Posiciones' },
+  { to: '/settings', icon: Settings, label: 'Configuración' },
 ]
 
 export default function Sidebar() {
