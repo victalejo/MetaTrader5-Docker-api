@@ -1,6 +1,11 @@
 import { useState } from 'react'
-import { X } from 'lucide-react'
+import { X, AlertCircle, Loader2 } from 'lucide-react'
 import { clsx } from 'clsx'
+
+const SERVERS = [
+  { value: 'Weltrade-Demo', label: 'Weltrade Demo' },
+  { value: 'Weltrade-Live', label: 'Weltrade Real' },
+]
 
 const LOT_MODES = [
   { value: 'exact', label: 'Exacto', description: 'Mismo lote que el principal' },
@@ -10,18 +15,20 @@ const LOT_MODES = [
 ]
 
 export default function AddSlaveForm({ onSave, onCancel, isLoading }) {
+  const [step, setStep] = useState(1)
   const [form, setForm] = useState({
-    name: '',
-    host: '',
-    port: 8001,
-    enabled: true,
-    lot_mode: 'exact',
+    // MT5 Credentials
+    login: '',
+    password: '',
+    server: 'Weltrade-Demo',
+    // Copy Settings
+    lot_mode: 'proportional',
     lot_value: 1.0,
     max_lot: 10.0,
     min_lot: 0.01,
-    magic_number: 123456,
+    magic_number: Math.floor(Date.now() / 1000) % 1000000,
     invert_trades: false,
-    max_slippage: 20,
+    max_slippage: 30,
     symbols_filter: '',
   })
 
@@ -33,36 +40,48 @@ export default function AddSlaveForm({ onSave, onCancel, isLoading }) {
       ...prev,
       [name]: type === 'checkbox' ? checked : value,
     }))
-    // Clear error when field is edited
     if (errors[name]) {
       setErrors((prev) => ({ ...prev, [name]: null }))
     }
   }
 
-  const validate = () => {
+  const validateStep1 = () => {
     const newErrors = {}
-    if (!form.name.trim()) {
-      newErrors.name = 'El nombre es requerido'
+    if (!form.login.trim()) {
+      newErrors.login = 'El ID de cuenta es requerido'
+    } else if (!/^\d+$/.test(form.login.trim())) {
+      newErrors.login = 'El ID debe ser numérico'
     }
-    if (!form.host.trim()) {
-      newErrors.host = 'El host es requerido'
-    }
-    if (!form.port || form.port < 1 || form.port > 65535) {
-      newErrors.port = 'Puerto inválido (1-65535)'
+    if (!form.password.trim()) {
+      newErrors.password = 'La contraseña es requerida'
     }
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
   }
 
+  const handleNext = () => {
+    if (validateStep1()) {
+      setStep(2)
+    }
+  }
+
+  const handleBack = () => {
+    setStep(1)
+  }
+
   const handleSubmit = (e) => {
     e.preventDefault()
-    if (!validate()) return
+
+    // Generate a unique name based on login
+    const name = `slave-${form.login}`
 
     const data = {
-      name: form.name.trim(),
-      host: form.host.trim(),
-      port: parseInt(form.port),
-      enabled: form.enabled,
+      // MT5 Credentials for container deployment
+      mt5_login: form.login.trim(),
+      mt5_password: form.password,
+      mt5_server: form.server,
+      // Slave configuration
+      name,
       lot_mode: form.lot_mode,
       lot_value: parseFloat(form.lot_value),
       max_lot: parseFloat(form.max_lot),
@@ -79,7 +98,7 @@ export default function AddSlaveForm({ onSave, onCancel, isLoading }) {
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-slate-800 rounded-lg border border-slate-700 w-full max-w-lg max-h-[90vh] overflow-auto">
+      <div className="bg-slate-800 rounded-lg border border-slate-700 w-full max-w-md max-h-[90vh] overflow-auto">
         <div className="flex items-center justify-between p-4 border-b border-slate-700">
           <h2 className="text-lg font-semibold text-slate-100">
             Agregar Cuenta Esclava
@@ -89,88 +108,102 @@ export default function AddSlaveForm({ onSave, onCancel, isLoading }) {
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-4 space-y-4">
-          {/* Connection Info */}
-          <div className="border-b border-slate-700 pb-4">
-            <h3 className="text-sm font-medium text-slate-300 mb-3">Conexión</h3>
+        {/* Step Indicator */}
+        <div className="px-4 pt-4">
+          <div className="flex items-center gap-2">
+            <div className={clsx(
+              'w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium',
+              step >= 1 ? 'bg-blue-600 text-white' : 'bg-slate-700 text-slate-400'
+            )}>1</div>
+            <div className={clsx('flex-1 h-1 rounded', step >= 2 ? 'bg-blue-600' : 'bg-slate-700')} />
+            <div className={clsx(
+              'w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium',
+              step >= 2 ? 'bg-blue-600 text-white' : 'bg-slate-700 text-slate-400'
+            )}>2</div>
+          </div>
+          <div className="flex justify-between mt-2 text-xs text-slate-400">
+            <span>Cuenta MT5</span>
+            <span>Configuración</span>
+          </div>
+        </div>
 
-            <div className="space-y-3">
+        <form onSubmit={handleSubmit} className="p-4">
+          {step === 1 && (
+            <div className="space-y-4">
+              <div className="bg-blue-500/10 border border-blue-500/20 rounded-lg p-3">
+                <p className="text-sm text-blue-200">
+                  Ingresa los datos de la cuenta MetaTrader 5 que deseas agregar como esclava.
+                </p>
+              </div>
+
               <div>
                 <label className="block text-sm font-medium text-slate-300 mb-1">
-                  Nombre <span className="text-red-400">*</span>
+                  ID de Cuenta (Login) <span className="text-red-400">*</span>
                 </label>
                 <input
                   type="text"
-                  name="name"
-                  value={form.name}
+                  name="login"
+                  value={form.login}
                   onChange={handleChange}
-                  placeholder="slave-cuenta1"
+                  placeholder="19713032"
                   className={clsx(
                     'w-full bg-slate-700 border rounded-lg px-3 py-2 text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500',
-                    errors.name ? 'border-red-500' : 'border-slate-600'
+                    errors.login ? 'border-red-500' : 'border-slate-600'
                   )}
                 />
-                {errors.name && <p className="text-xs text-red-400 mt-1">{errors.name}</p>}
+                {errors.login && <p className="text-xs text-red-400 mt-1">{errors.login}</p>}
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-1">
-                    Host <span className="text-red-400">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    name="host"
-                    value={form.host}
-                    onChange={handleChange}
-                    placeholder="mt5-slave1 o 192.168.1.100"
-                    className={clsx(
-                      'w-full bg-slate-700 border rounded-lg px-3 py-2 text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500',
-                      errors.host ? 'border-red-500' : 'border-slate-600'
-                    )}
-                  />
-                  {errors.host && <p className="text-xs text-red-400 mt-1">{errors.host}</p>}
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-1">
-                    Puerto <span className="text-red-400">*</span>
-                  </label>
-                  <input
-                    type="number"
-                    name="port"
-                    value={form.port}
-                    onChange={handleChange}
-                    min="1"
-                    max="65535"
-                    className={clsx(
-                      'w-full bg-slate-700 border rounded-lg px-3 py-2 text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500',
-                      errors.port ? 'border-red-500' : 'border-slate-600'
-                    )}
-                  />
-                  {errors.port && <p className="text-xs text-red-400 mt-1">{errors.port}</p>}
-                </div>
-              </div>
-
-              <div className="flex items-center">
-                <input
-                  type="checkbox"
-                  name="enabled"
-                  checked={form.enabled}
-                  onChange={handleChange}
-                  className="w-4 h-4 rounded border-slate-600 bg-slate-700 text-blue-500 focus:ring-blue-500"
-                />
-                <label className="ml-2 text-sm text-slate-300">
-                  Habilitar al crear
+              <div>
+                <label className="block text-sm font-medium text-slate-300 mb-1">
+                  Contraseña <span className="text-red-400">*</span>
                 </label>
+                <input
+                  type="password"
+                  name="password"
+                  value={form.password}
+                  onChange={handleChange}
+                  placeholder="••••••••"
+                  className={clsx(
+                    'w-full bg-slate-700 border rounded-lg px-3 py-2 text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500',
+                    errors.password ? 'border-red-500' : 'border-slate-600'
+                  )}
+                />
+                {errors.password && <p className="text-xs text-red-400 mt-1">{errors.password}</p>}
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-slate-300 mb-1">
+                  Servidor <span className="text-red-400">*</span>
+                </label>
+                <select
+                  name="server"
+                  value={form.server}
+                  onChange={handleChange}
+                  className="w-full bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  {SERVERS.map((server) => (
+                    <option key={server.value} value={server.value}>
+                      {server.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="flex justify-end pt-4">
+                <button
+                  type="button"
+                  onClick={handleNext}
+                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                >
+                  Siguiente
+                </button>
               </div>
             </div>
-          </div>
+          )}
 
-          {/* Lot Configuration */}
-          <div className="border-b border-slate-700 pb-4">
-            <h3 className="text-sm font-medium text-slate-300 mb-3">Configuración de Lote</h3>
-
-            <div className="space-y-3">
+          {step === 2 && (
+            <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-slate-300 mb-1">
                   Modo de Lote
@@ -183,10 +216,13 @@ export default function AddSlaveForm({ onSave, onCancel, isLoading }) {
                 >
                   {LOT_MODES.map((mode) => (
                     <option key={mode.value} value={mode.value}>
-                      {mode.label} - {mode.description}
+                      {mode.label}
                     </option>
                   ))}
                 </select>
+                <p className="text-xs text-slate-500 mt-1">
+                  {LOT_MODES.find((m) => m.value === form.lot_mode)?.description}
+                </p>
               </div>
 
               <div className="grid grid-cols-3 gap-3">
@@ -206,7 +242,7 @@ export default function AddSlaveForm({ onSave, onCancel, isLoading }) {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-slate-300 mb-1">
-                    Mínimo
+                    Mín
                   </label>
                   <input
                     type="number"
@@ -220,7 +256,7 @@ export default function AddSlaveForm({ onSave, onCancel, isLoading }) {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-slate-300 mb-1">
-                    Máximo
+                    Máx
                   </label>
                   <input
                     type="number"
@@ -233,14 +269,7 @@ export default function AddSlaveForm({ onSave, onCancel, isLoading }) {
                   />
                 </div>
               </div>
-            </div>
-          </div>
 
-          {/* Trade Configuration */}
-          <div className="border-b border-slate-700 pb-4">
-            <h3 className="text-sm font-medium text-slate-300 mb-3">Configuración de Operaciones</h3>
-
-            <div className="space-y-3">
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="block text-sm font-medium text-slate-300 mb-1">
@@ -256,7 +285,7 @@ export default function AddSlaveForm({ onSave, onCancel, isLoading }) {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-slate-300 mb-1">
-                    Deslizamiento Máx.
+                    Deslizamiento
                   </label>
                   <input
                     type="number"
@@ -281,48 +310,52 @@ export default function AddSlaveForm({ onSave, onCancel, isLoading }) {
                   Invertir operaciones (COMPRA → VENTA)
                 </label>
               </div>
+
+              <div>
+                <label className="block text-sm font-medium text-slate-300 mb-1">
+                  Filtro de Símbolos (opcional)
+                </label>
+                <input
+                  type="text"
+                  name="symbols_filter"
+                  value={form.symbols_filter}
+                  onChange={handleChange}
+                  placeholder="EURUSD, GBPUSD (vacío = todos)"
+                  className="w-full bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+
+              {/* Warning */}
+              <div className="flex items-start gap-3 p-3 bg-yellow-500/10 rounded-lg border border-yellow-500/20">
+                <AlertCircle className="w-5 h-5 text-yellow-400 shrink-0 mt-0.5" />
+                <div className="text-sm text-yellow-200">
+                  Se creará un nuevo contenedor MT5 para esta cuenta. Esto puede tardar unos minutos.
+                </div>
+              </div>
+
+              <div className="flex justify-between pt-4">
+                <button
+                  type="button"
+                  onClick={handleBack}
+                  className="px-4 py-2 text-sm text-slate-300 hover:text-slate-100"
+                >
+                  Atrás
+                </button>
+                <button
+                  type="submit"
+                  disabled={isLoading}
+                  className={clsx(
+                    'flex items-center px-4 py-2 text-sm font-medium rounded-lg',
+                    'bg-blue-600 text-white hover:bg-blue-700',
+                    'disabled:opacity-50 disabled:cursor-not-allowed'
+                  )}
+                >
+                  {isLoading && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+                  {isLoading ? 'Creando...' : 'Crear Esclava'}
+                </button>
+              </div>
             </div>
-          </div>
-
-          {/* Symbols Filter */}
-          <div>
-            <label className="block text-sm font-medium text-slate-300 mb-1">
-              Filtro de Símbolos (opcional)
-            </label>
-            <input
-              type="text"
-              name="symbols_filter"
-              value={form.symbols_filter}
-              onChange={handleChange}
-              placeholder="EURUSD, GBPUSD, USDJPY (vacío = todos)"
-              className="w-full bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-            <p className="text-xs text-slate-500 mt-1">
-              Separar símbolos con comas. Dejar vacío para copiar todos.
-            </p>
-          </div>
-
-          {/* Actions */}
-          <div className="flex justify-end gap-3 pt-4">
-            <button
-              type="button"
-              onClick={onCancel}
-              className="px-4 py-2 text-sm font-medium text-slate-300 hover:text-slate-100"
-            >
-              Cancelar
-            </button>
-            <button
-              type="submit"
-              disabled={isLoading}
-              className={clsx(
-                'px-4 py-2 text-sm font-medium rounded-lg',
-                'bg-blue-600 text-white hover:bg-blue-700',
-                'disabled:opacity-50 disabled:cursor-not-allowed'
-              )}
-            >
-              {isLoading ? 'Creando...' : 'Crear Esclava'}
-            </button>
-          </div>
+          )}
         </form>
       </div>
     </div>

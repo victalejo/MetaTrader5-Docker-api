@@ -35,6 +35,11 @@ export const api = {
     method: 'POST',
     body: JSON.stringify(data),
   }),
+  // Deploy new slave (creates container + registers)
+  deploySlave: (data) => request('/deploy/slave', {
+    method: 'POST',
+    body: JSON.stringify(data),
+  }),
   updateSlave: (name, data) => request(`/accounts/slaves/${name}`, {
     method: 'PUT',
     body: JSON.stringify(data),

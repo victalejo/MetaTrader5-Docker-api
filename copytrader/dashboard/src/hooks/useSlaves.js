@@ -21,6 +21,22 @@ export function useCreateSlave() {
   })
 }
 
+export function useDeploySlave() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: (data) => api.deploySlave(data),
+    onSuccess: () => {
+      // Wait a bit for container to start before refreshing
+      setTimeout(() => {
+        queryClient.invalidateQueries({ queryKey: ['slaves'] })
+        queryClient.invalidateQueries({ queryKey: ['accounts'] })
+        queryClient.invalidateQueries({ queryKey: ['health'] })
+      }, 5000)
+    },
+  })
+}
+
 export function useUpdateSlave() {
   const queryClient = useQueryClient()
 

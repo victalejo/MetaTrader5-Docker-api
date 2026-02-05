@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Plus, Power, PowerOff, Trash2, Settings, RefreshCw } from 'lucide-react'
 import { clsx } from 'clsx'
 import { useAccounts, useReconnectAccount } from '../hooks/useAccounts'
-import { useSlaves, useEnableSlave, useDisableSlave, useDeleteSlave, useUpdateSlave, useCreateSlave } from '../hooks/useSlaves'
+import { useSlaves, useEnableSlave, useDisableSlave, useDeleteSlave, useUpdateSlave, useDeploySlave } from '../hooks/useSlaves'
 import AccountCard from '../components/AccountCard'
 import SlaveConfigForm from '../components/SlaveConfigForm'
 import AddSlaveForm from '../components/AddSlaveForm'
@@ -14,7 +14,7 @@ export default function Accounts() {
   const disableSlave = useDisableSlave()
   const deleteSlave = useDeleteSlave()
   const updateSlave = useUpdateSlave()
-  const createSlave = useCreateSlave()
+  const deploySlave = useDeploySlave()
   const reconnect = useReconnectAccount()
 
   const [editingSlave, setEditingSlave] = useState(null)
@@ -41,8 +41,8 @@ export default function Accounts() {
     )
   }
 
-  const handleCreateSlave = (data) => {
-    createSlave.mutate(data, {
+  const handleDeploySlave = (data) => {
+    deploySlave.mutate(data, {
       onSuccess: () => setShowAddForm(false),
     })
   }
@@ -227,9 +227,9 @@ export default function Accounts() {
       {/* Add Slave Modal */}
       {showAddForm && (
         <AddSlaveForm
-          onSave={handleCreateSlave}
+          onSave={handleDeploySlave}
           onCancel={() => setShowAddForm(false)}
-          isLoading={createSlave.isPending}
+          isLoading={deploySlave.isPending}
         />
       )}
 
